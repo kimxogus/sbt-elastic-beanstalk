@@ -7,13 +7,7 @@ name := "sbt-elastic-beanstalk"
 organization := "io.xogus"
 resolvers += Resolver.jcenterRepo
 
-crossSbtVersions := Seq("0.13.16", "1.0.4")
-val sbtCrossVersion = sbtVersion in pluginCrossBuild
-scalaVersion := (CrossVersion partialVersion sbtCrossVersion.value match {
-  case Some((0, 13)) => "2.10.6"
-  case Some((1, _))  => "2.12.4"
-  case _             => sys error s"Unhandled sbt version ${sbtCrossVersion.value}"
-})
+scalaVersion := "2.12.4"
 javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 scalacOptions := Seq("-deprecation", "-unchecked", "-feature")
 

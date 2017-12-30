@@ -42,7 +42,7 @@ object ElasticBeanstalkPlugin extends AutoPlugin {
 
   override lazy val projectSettings: Seq[Def.Setting[_]] = inConfig(ElasticBeanstalk)(
     Seq(
-      dist := {
+      dist in ElasticBeanstalk := {
         val s = streams.value
         s.log.info("")
         s.log.info("Your package is ready in " + dist.value.getCanonicalPath)
@@ -50,19 +50,25 @@ object ElasticBeanstalkPlugin extends AutoPlugin {
         dist.value
       },
       elasticBeanstalkPackageMappings := (sourceDirectory map { dir => MappingsHelper contentOf dir }).value,
-      mappings := ((mappings in Docker).value ++ elasticBeanstalkPackageMappings.value),
+      mappings in ElasticBeanstalk := ((mappings in Docker).value ++ elasticBeanstalkPackageMappings.value),
       mappings in packageBin := (stage map { dir => MappingsHelper contentOf dir }).value,
-      packageBin := {
+      stagingDirectory in ElasticBeanstalk := (stagingDirectory in Docker).value,
+      target in ElasticBeanstalk := target.value / ElasticBeanstalk.name,
+      packageBin in ElasticBeanstalk := {
         Archives.makeZip(
-          target.value,
-          (packageName in Universal).value,
+          (target in ElasticBeanstalk).value,
+          (packageName in ElasticBeanstalk).value,
           (mappings in packageBin).value,
-          None, Seq.empty)
+          None,
+          Seq.empty)
       },
-      sourceDirectory := baseDirectory.value / ElasticBeanstalk.name,
-      stage := {
-        Stager.stage(ElasticBeanstalk.name)(streams.value, stagingDirectory.value, mappings.value)
-      },
-      stagingDirectory := (stagingDirectory in Docker).value,
-      target := target.value / ElasticBeanstalk.name))
+      packageName in ElasticBeanstalk := (packageName in Universal).value,
+      sourceDirectory in ElasticBeanstalk := baseDirectory.value / ElasticBeanstalk.name,
+      stage in ElasticBeanstalk := {
+        Stager.stage(ElasticBeanstalk.name)(
+          streams.value,
+          (stagingDirectory in ElasticBeanstalk).value,
+          (mappings in ElasticBeanstalk).value)
+      })
+  )
 }

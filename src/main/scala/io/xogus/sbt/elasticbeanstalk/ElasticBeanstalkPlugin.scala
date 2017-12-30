@@ -53,9 +53,12 @@ object ElasticBeanstalkPlugin extends AutoPlugin {
       mappings := ((mappings in Docker).value ++ elasticBeanstalkPackageMappings.value),
       mappings in packageBin := (stage map { dir => MappingsHelper contentOf dir }).value,
       packageBin := {
-        Archives.makeZip(target.value, packageName.value, (mappings in packageBin).value, None, Seq.empty)
+        Archives.makeZip(
+          target.value,
+          (packageName in Universal).value,
+          (mappings in packageBin).value,
+          None, Seq.empty)
       },
-      packageName := (packageName in Universal).value,
       sourceDirectory := baseDirectory.value / ElasticBeanstalk.name,
       stage := {
         Stager.stage(ElasticBeanstalk.name)(streams.value, stagingDirectory.value, mappings.value)

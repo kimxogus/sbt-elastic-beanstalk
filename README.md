@@ -18,8 +18,6 @@ Forked from [kipsigman/sbt-elastic-beanstalk](https://github.com/kipsigman/sbt-e
 Add the following to your `project/plugins.sbt` file:
 
 ```scala
-resolvers += Resolver.url("bintray-kimxogus-sbt-plugins", url("http://dl.bintray.com/kimxogus/sbt-plugins"))(Resolver.ivyStylePatterns)
-
 addSbtPlugin("io.xogus" % "sbt-elastic-beanstalk" % "0.2.0")
 ```
 

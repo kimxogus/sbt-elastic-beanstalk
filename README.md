@@ -1,4 +1,8 @@
 # sbt-elastic-beanstalk-plugin
+
+[ ![Download](https://api.bintray.com/packages/kimxogus/sbt-plugins/sbt-elastic-beanstalk/images/download.svg) ](https://bintray.com/kimxogus/sbt-plugins/sbt-elastic-beanstalk/_latestVersion)
+
+
 Creates a distribution of your Scala/Play/Akka app for deployment on AWS Amazon Web Services) Elastic Beanstalk.
 Forked from [kipsigman/sbt-elastic-beanstalk](https://github.com/kipsigman/sbt-elastic-beanstalk)
 

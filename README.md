@@ -18,9 +18,9 @@ Forked from [kipsigman/sbt-elastic-beanstalk](https://github.com/kipsigman/sbt-e
 Add the following to your `project/plugins.sbt` file:
 
 ```scala
-resolvers += Resolver.url("bintray-kipsigman-sbt-plugins", url("http://dl.bintray.com/kipsigman/sbt-plugins"))(Resolver.ivyStylePatterns)
+resolvers += Resolver.url("bintray-kimxogus-sbt-plugins", url("http://dl.bintray.com/kimxogus/sbt-plugins"))(Resolver.ivyStylePatterns)
 
-addSbtPlugin("kipsigman" % "sbt-elastic-beanstalk" % "0.1.4")
+addSbtPlugin("io.xogus" % "sbt-elastic-beanstalk" % "0.2.0")
 ```
 
 In your `build.sbt` enable the plugin.
@@ -36,7 +36,9 @@ enablePlugins(ElasticBeanstalkPlugin)
   example (for a Play app):
   
   ```scala
-  maintainer in Docker := "Johnny Utah <johnny.utah@fbi.gov>"
+  dockerLabels := Map(
+   "maintainer" -> "Johnny Utah <johnny.utah@fbi.gov>"
+  ),
   dockerExposedPorts := Seq(9000)
   dockerBaseImage := "java:latest"
   ```

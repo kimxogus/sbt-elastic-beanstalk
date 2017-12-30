@@ -1,4 +1,4 @@
-package kipsigman.sbt.elasticbeanstalk
+package io.xogus.sbt.elasticbeanstalk
 
 import sbt._
 

@@ -1,5 +1,6 @@
 # sbt-elastic-beanstalk-plugin
 Creates a distribution of your Scala/Play/Akka app for deployment on AWS Amazon Web Services) Elastic Beanstalk.
+Forked from [kipsigman/sbt-elastic-beanstalk](https://github.com/kipsigman/sbt-elastic-beanstalk)
 
 ## Features
 
@@ -21,7 +22,7 @@ addSbtPlugin("kipsigman" % "sbt-elastic-beanstalk" % "0.1.4")
 In your `build.sbt` enable the plugin.
 
 ```scala
-enablePlugins(ElasticBeanstalk)
+enablePlugins(ElasticBeanstalkPlugin)
 ```
 
 ## Usage

@@ -42,7 +42,7 @@ object ElasticBeanstalkPlugin extends AutoPlugin {
 
   override lazy val projectSettings: Seq[Def.Setting[_]] = inConfig(ElasticBeanstalk)(
     Seq(
-      dist in ElasticBeanstalk := {
+      dist := {
         val s = streams.value
         s.log.info("")
         s.log.info("Your package is ready in " + dist.value.getCanonicalPath)
@@ -50,21 +50,21 @@ object ElasticBeanstalkPlugin extends AutoPlugin {
         dist.value
       },
       elasticBeanstalkPackageMappings := (sourceDirectory map { dir => MappingsHelper contentOf dir }).value,
-      mappings in ElasticBeanstalk := ((mappings in Docker).value ++ elasticBeanstalkPackageMappings.value),
+      mappings := ((mappings in Docker).value ++ elasticBeanstalkPackageMappings.value),
       mappings in packageBin := (stage map { dir => MappingsHelper contentOf dir }).value,
-      stagingDirectory in ElasticBeanstalk := (stagingDirectory in Docker).value,
-      target in ElasticBeanstalk := target.value / ElasticBeanstalk.name,
-      packageBin in ElasticBeanstalk := {
+      stagingDirectory := (stagingDirectory in Docker).value,
+      target := target.value / ElasticBeanstalk.name,
+      packageBin := {
         Archives.makeZip(
-          (target in ElasticBeanstalk).value,
-          (packageName in ElasticBeanstalk).value,
+          target.value,
+          packageName.value,
           (mappings in packageBin).value,
           None,
           Seq.empty)
       },
-      packageName in ElasticBeanstalk := (packageName in Universal).value,
-      sourceDirectory in ElasticBeanstalk := baseDirectory.value / ElasticBeanstalk.name,
-      stage in ElasticBeanstalk := {
+      packageName := (packageName in Universal).value,
+      sourceDirectory := baseDirectory.value / ElasticBeanstalk.name,
+      stage := {
         Stager.stage(ElasticBeanstalk.name)(
           streams.value,
           (stagingDirectory in ElasticBeanstalk).value,

@@ -1,4 +1,4 @@
-name := "sbt-elastic-beanstalk-test"
-version := "0.2.0"
-
 enablePlugins(ElasticBeanstalkPlugin)
+
+name := "sbt-elastic-beanstalk-test"
+version := "0.3.0"

@@ -35,7 +35,7 @@ object ElasticBeanstalkPlugin extends AutoPlugin {
   override def requires: DockerPlugin.type = DockerPlugin
 
   object autoImport extends ElasticBeanstalkKeys {
-    val ElasticBeanstalk = config("elastic-beanstalk") extend Docker
+    val ElasticBeanstalk = config("elastic-beanstalk")
   }
 
   import autoImport._
@@ -65,6 +65,7 @@ object ElasticBeanstalkPlugin extends AutoPlugin {
       packageName := (packageName in Universal).value,
       sourceDirectory := baseDirectory.value / ElasticBeanstalk.name,
       stage := {
+        (stage in Docker).value
         Stager.stage(ElasticBeanstalk.name)(
           streams.value,
           (stagingDirectory in ElasticBeanstalk).value,

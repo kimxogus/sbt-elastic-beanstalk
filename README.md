@@ -32,12 +32,13 @@ enablePlugins(ElasticBeanstalkPlugin)
 1. Add `build.sbt` settings for the [SBT Native Packager Docker plugin](http://www.scala-sbt.org/sbt-native-packager/formats/docker.html).
 
   example (for a Play app):
-  
+
   ```scala
+  packageName in Universal := "zip-file-name",
   dockerLabels := Map(
-   "maintainer" -> "Johnny Utah <johnny.utah@fbi.gov>"
+   "maintainer" -> "Taehyun Kim <kgyoo8232@gmail.com>"
   ),
-  dockerExposedPorts := Seq(9000)
+  dockerExposedPorts := Seq(9000),
   dockerBaseImage := "java:latest"
   ```
 

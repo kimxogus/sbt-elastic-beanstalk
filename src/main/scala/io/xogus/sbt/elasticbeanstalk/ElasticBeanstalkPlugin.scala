@@ -35,22 +35,25 @@ object ElasticBeanstalkPlugin extends AutoPlugin {
   override def requires: DockerPlugin.type = DockerPlugin
 
   object autoImport extends ElasticBeanstalkKeys {
-    val ElasticBeanstalk = config("elastic-beanstalk")
+    val ElasticBeanstalk = config("elastic-beanstalk") extend Docker
   }
 
   import autoImport._
 
-  override lazy val projectSettings: Seq[Def.Setting[_]] = inConfig(ElasticBeanstalk)(
+  override lazy val projectSettings: Seq[Def.Setting[_]] = Seq(
+    elasticBeanstalkPackageMappings := (sourceDirectory map { dir => MappingsHelper contentOf dir }).value
+  ) ++ inConfig(ElasticBeanstalk)(
     Seq(
       dist := {
-        val s = streams.value
-        s.log.info("")
-        s.log.info("Your package is ready in " + dist.value.getCanonicalPath)
-        s.log.info("")
-        dist.value
+        val logger = streams.value.log
+        val dist = (packageBin in ElasticBeanstalk).value
+        logger.info("")
+        logger.info("Your package is ready in " + dist.getCanonicalPath)
+        logger.info("")
+        dist
       },
-      elasticBeanstalkPackageMappings := (sourceDirectory map { dir => MappingsHelper contentOf dir }).value,
-      mappings := ((mappings in Docker).value ++ elasticBeanstalkPackageMappings.value),
+      name := name.value,
+      mappings := (mappings in Docker).value ++ elasticBeanstalkPackageMappings.value,
       mappings in packageBin := (stage map { dir => MappingsHelper contentOf dir }).value,
       stagingDirectory := (stagingDirectory in Docker).value,
       target := target.value / ElasticBeanstalk.name,
@@ -63,13 +66,8 @@ object ElasticBeanstalkPlugin extends AutoPlugin {
           Seq.empty)
       },
       packageName := (packageName in Universal).value,
-      sourceDirectory := baseDirectory.value / ElasticBeanstalk.name,
-      stage := {
-        (stage in Docker).value
-        Stager.stage(ElasticBeanstalk.name)(
-          streams.value,
-          (stagingDirectory in ElasticBeanstalk).value,
-          (mappings in ElasticBeanstalk).value)
-      })
+      sourceDirectory := (target in Docker).value,
+      stage := (stage in Docker).value
+    )
   )
 }

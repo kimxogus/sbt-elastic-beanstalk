@@ -18,7 +18,7 @@ Forked from [kipsigman/sbt-elastic-beanstalk](https://github.com/kipsigman/sbt-e
 Add the following to your `project/plugins.sbt` file:
 
 ```scala
-addSbtPlugin("io.xogus" % "sbt-elastic-beanstalk" % "0.2.0")
+addSbtPlugin("io.xogus" % "sbt-elastic-beanstalk" % "0.4.0")
 ```
 
 In your `build.sbt` enable the plugin.

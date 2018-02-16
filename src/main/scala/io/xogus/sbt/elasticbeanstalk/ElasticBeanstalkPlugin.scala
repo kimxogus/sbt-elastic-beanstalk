@@ -36,6 +36,7 @@ object ElasticBeanstalkPlugin extends AutoPlugin {
 
   object autoImport extends ElasticBeanstalkKeys {
     val ElasticBeanstalk = config("elastic-beanstalk") extend Docker
+    val ebextensionsDirectory = settingKey[String]("directory of .ebextensions")
   }
 
   import autoImport._
@@ -65,6 +66,7 @@ object ElasticBeanstalkPlugin extends AutoPlugin {
           None,
           Seq.empty)
       },
+      ebextensionsDirectory := baseDirectory.value.getParent,
       packageName := (packageName in Universal).value,
       sourceDirectory := (target in Docker).value,
       stage := (stage in Docker).value

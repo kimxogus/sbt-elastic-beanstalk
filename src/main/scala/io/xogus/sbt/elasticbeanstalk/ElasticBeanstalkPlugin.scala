@@ -1,14 +1,13 @@
 package io.xogus.sbt.elasticbeanstalk
 
-import sbt._
-import sbt.Keys._
-import com.typesafe.sbt.SbtNativePackager.Docker
-import com.typesafe.sbt.SbtNativePackager.Universal
+import com.typesafe.sbt.SbtNativePackager.{Docker, Universal}
 import com.typesafe.sbt.packager.Keys._
 import com.typesafe.sbt.packager.MappingsHelper
-import com.typesafe.sbt.packager.Stager
 import com.typesafe.sbt.packager.docker.DockerPlugin
 import com.typesafe.sbt.packager.universal.Archives
+import sbt.Keys._
+import sbt._
+import sbt.io.PathFinder
 
 /**
   * == Elastic Beanstalk Plugin ==
@@ -36,7 +35,8 @@ object ElasticBeanstalkPlugin extends AutoPlugin {
 
   object autoImport extends ElasticBeanstalkKeys {
     val ElasticBeanstalk = config("elastic-beanstalk") extend Docker
-    val ebextensionsDirectory = settingKey[String]("directory of .ebextensions")
+    val ebextensionsDirectory = settingKey[File]("directory of .ebextensions")
+    val ebextensionsMappings = settingKey[Seq[(File, String)]]("")
   }
 
   import autoImport._
@@ -54,8 +54,8 @@ object ElasticBeanstalkPlugin extends AutoPlugin {
         dist
       },
       name := name.value,
-      mappings := (mappings in Docker).value ++ elasticBeanstalkPackageMappings.value,
-      mappings in packageBin := (stage map { dir => MappingsHelper contentOf dir }).value,
+      mappings := (mappings in Docker).value ++ elasticBeanstalkPackageMappings.value ++ ebextensionsMappings.value,
+      mappings in packageBin := stage.map { dir => MappingsHelper contentOf dir }.value ++ ebextensionsMappings.value,
       stagingDirectory := (stagingDirectory in Docker).value,
       target := target.value / ElasticBeanstalk.name,
       packageBin := {
@@ -66,7 +66,15 @@ object ElasticBeanstalkPlugin extends AutoPlugin {
           None,
           Seq.empty)
       },
-      ebextensionsDirectory := baseDirectory.value.getParent,
+      ebextensionsDirectory := baseDirectory.value.getParentFile / ".ebextensions",
+      ebextensionsMappings := {
+        if (ebextensionsDirectory.value.exists()) {
+          val dir = ebextensionsDirectory.value
+          (PathFinder(dir).allPaths --- PathFinder(dir)) pair MappingsHelper.relativeTo(new File(dir.getParent))
+        } else {
+          Nil
+        }
+      },
       packageName := (packageName in Universal).value,
       sourceDirectory := (target in Docker).value,
       stage := (stage in Docker).value

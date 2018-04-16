@@ -3,4 +3,4 @@ enablePlugins(ElasticBeanstalkPlugin)
 
 name := "test-dockerrun"
 version := "0.4.0"
-elasticbeanstalkSources ++= Seq(baseDirectory.value / "Dockerrun.aws.json")
+elasticBeanstalkSources ++= Seq(baseDirectory.value / "Dockerrun.aws.json")

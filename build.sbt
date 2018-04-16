@@ -11,7 +11,7 @@ scalaVersion := "2.12.4"
 javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 scalacOptions := Seq("-deprecation", "-unchecked", "-feature")
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.3.3")
+addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.3.4")
 
 licenses += ("Apache-2.0", url("https://github.com/kimxogus/sbt-elastic-beanstalk/blob/master/LICENSE"))
 homepage := Some(url("https://github.com/kimxogus/sbt-elastic-beanstalk"))

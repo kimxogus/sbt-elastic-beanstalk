@@ -35,8 +35,8 @@ object ElasticBeanstalkPlugin extends AutoPlugin {
 
   object autoImport extends ElasticBeanstalkKeys {
     val ElasticBeanstalk = config("elastic-beanstalk") extend Docker
-    val ebextensionsDirectory = settingKey[File]("directory of .ebextensions")
-    val ebextensionsMappings = settingKey[Seq[(File, String)]]("")
+    val elasticBeanstalkSources = settingKey[Seq[File]]("sources to be packaged")
+    val elasticBeanstalkSourceMappings = settingKey[Seq[(File, String)]]("")
   }
 
   import autoImport._
@@ -54,8 +54,8 @@ object ElasticBeanstalkPlugin extends AutoPlugin {
         dist
       },
       name := name.value,
-      mappings := (mappings in Docker).value ++ elasticBeanstalkPackageMappings.value ++ ebextensionsMappings.value,
-      mappings in packageBin := stage.map { dir => MappingsHelper contentOf dir }.value ++ ebextensionsMappings.value,
+      mappings := (mappings in Docker).value ++ elasticBeanstalkPackageMappings.value ++ elasticBeanstalkSourceMappings.value,
+      mappings in packageBin := stage.map { dir => MappingsHelper contentOf dir }.value ++ elasticBeanstalkSourceMappings.value,
       stagingDirectory := (stagingDirectory in Docker).value,
       target := target.value / ElasticBeanstalk.name,
       packageBin := {
@@ -66,13 +66,10 @@ object ElasticBeanstalkPlugin extends AutoPlugin {
           None,
           Seq.empty)
       },
-      ebextensionsDirectory := baseDirectory.value.getParentFile / ".ebextensions",
-      ebextensionsMappings := {
-        if (ebextensionsDirectory.value.exists()) {
-          val dir = ebextensionsDirectory.value
-          (PathFinder(dir).allPaths --- PathFinder(dir)) pair MappingsHelper.relativeTo(new File(dir.getParent))
-        } else {
-          Nil
+      elasticBeanstalkSources := Nil,
+      elasticBeanstalkSourceMappings := {
+        elasticBeanstalkSources.value.filter(_.exists()).flatMap {
+          dir => (PathFinder(dir).allPaths --- PathFinder(dir)) pair MappingsHelper.relativeTo(new File(dir.getParent))
         }
       },
       packageName := (packageName in Universal).value,

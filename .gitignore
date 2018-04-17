@@ -6,7 +6,7 @@ bin
 target
 tmp
 dist
-/.idea
+.idea
 /*.iml
 /*.yml
 /out

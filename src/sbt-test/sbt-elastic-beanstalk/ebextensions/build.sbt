@@ -1,6 +1,8 @@
 enablePlugins(JavaServerAppPackaging)
 enablePlugins(ElasticBeanstalkPlugin)
 
-name := "test-ebextensions"
-version := "0.4.0"
-elasticBeanstalkSources ++= Seq(baseDirectory.value / ".ebextensions")
+lazy val project = Project("test-ebextensions", file("."))
+  .settings(
+    version := "0.7.0",
+    elasticBeanstalkSources in ElasticBeanstalk ++= Seq(baseDirectory.value / ".ebextensions")
+  )

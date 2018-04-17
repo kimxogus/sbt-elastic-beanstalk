@@ -35,8 +35,6 @@ object ElasticBeanstalkPlugin extends AutoPlugin {
 
   object autoImport extends ElasticBeanstalkKeys {
     val ElasticBeanstalk = config("elastic-beanstalk") extend Docker
-    val elasticBeanstalkSources = settingKey[Seq[File]]("sources to be packaged")
-    val elasticBeanstalkSourceMappings = settingKey[Seq[(File, String)]]("")
   }
 
   import autoImport._
@@ -68,8 +66,9 @@ object ElasticBeanstalkPlugin extends AutoPlugin {
       },
       elasticBeanstalkSources := Nil,
       elasticBeanstalkSourceMappings := {
+        val baseDir = baseDirectory.value
         elasticBeanstalkSources.value.filter(_.exists()).flatMap {
-          dir => (PathFinder(dir).allPaths --- PathFinder(dir)) pair MappingsHelper.relativeTo(new File(dir.getParent))
+          dir => (PathFinder(dir).allPaths --- PathFinder(baseDir)) pair MappingsHelper.relativeTo(new File(dir.getParent))
         }
       },
       packageName := (packageName in Universal).value,

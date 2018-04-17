@@ -1,5 +1,5 @@
 # check if the file gets created
 > elastic-beanstalk:dist
-$ exists target/elastic-beanstalk/test-dockerrun-0.4.0.zip
-$ exec command unzip target/elastic-beanstalk/test-dockerrun-0.4.0.zip
-$ exists ls -al target/elastic-beanstalk/Dockerrun.aws.json
+$ exists target/elastic-beanstalk/test-dockerrun-0.7.0.zip
+$ exec command unzip -o target/elastic-beanstalk/test-dockerrun-0.7.0.zip
+$ exists Dockerrun.aws.json

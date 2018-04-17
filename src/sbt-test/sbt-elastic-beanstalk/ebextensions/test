@@ -1,5 +1,5 @@
 # check if the file gets created
 > elastic-beanstalk:dist
-$ exists target/elastic-beanstalk/test-ebextensions-0.4.0.zip
-$ exec command unzip target/elastic-beanstalk/test-ebextensions-0.4.0.zip
-$ exists target/elastic-beanstalk/.ebextensions/00-foo.config
+$ exists target/elastic-beanstalk/test-ebextensions-0.7.0.zip
+$ exec command unzip -o target/elastic-beanstalk/test-ebextensions-0.7.0.zip
+$ exists .ebextensions/00-foo.config

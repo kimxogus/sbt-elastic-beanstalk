@@ -26,6 +26,9 @@ jobs:
           paths:
             - ~/.sbt
             - ~/.ivy2/cache
+      - setup_remote_docker:
+          version: 17.11.0-ce
+          docker_layer_caching: true
       - run:
           name: "SBT scripted test"
           command: |

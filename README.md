@@ -34,7 +34,11 @@ enablePlugins(ElasticBeanstalkPlugin)
   example (for a Play app):
 
   ```scala
-  packageName in Universal := "zip-file-name",
+  packageName in ElasticBeanstalk := "zip-file-name",
+  elasticBeanstalkSources in ElasticBeanstalk := Seq(
+    baseDirectory.value / ".ebextensions",      // add .ebextensions folder
+    baseDirectory.value / "Dockerrun.aws.json"  // add Dockerrun.aws.json file
+  ),
   dockerLabels := Map(
    "maintainer" -> "Taehyun Kim <kgyoo8232@gmail.com>"
   ),

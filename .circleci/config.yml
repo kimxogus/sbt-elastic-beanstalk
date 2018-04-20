@@ -1,0 +1,41 @@
+defaults: &defaults
+  docker:
+    - image: circleci/openjdk:8-jdk
+
+aliases:
+  - &restore-cache
+      keys:
+        - dependency-cache-{{ checksum "project/build.properties" }}-{{ checksum "project/plugins.sbt" }}-{{ checksum "build.sbt" }}
+        - dependency-cache-{{ checksum "project/build.properties" }}-{{ checksum "project/plugins.sbt" }}-
+        - dependency-cache-{{ checksum "project/build.properties" }}-
+        - dependency-cache-
+
+version: 2
+jobs:
+  test:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore-cache: *restore-cache
+      - run:
+          name: "Install Dependencies"
+          command: |
+            sbt -batch update
+      - save-cache:
+          key: dependency-cache-{{ checksum "project/build.properties" }}-{{ checksum "project/plugins.sbt" }}-{{ checksum "build.sbt" }}
+          paths:
+            - ~/.sbt
+            - ~/.ivy2/cache
+      - run:
+          name: "SBT scripted test"
+          command: |
+            sbt -batch scripted
+
+workflows:
+  version: 2
+  test-deploy:
+    jobs:
+      - test:
+          filters:
+            branches:
+              only: /.*/
